@@ -6,8 +6,6 @@ int main(int argc, char **argv)
 {
 	Conversion conv;
 
-	std::cout << std::setprecision(1);
-	std::cout << std::fixed;
 	if (argc != 2)
 		std::cout << "invalid number of arguments" << std::endl;
 	else
