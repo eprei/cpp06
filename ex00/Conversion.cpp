@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <math.h>
 
 Conversion::Conversion(void) : _vChar(' '), _vInt(0), _vFloat(0), _vDouble(0.0),
 _sChar(STR_DEFAULT_VALUE), _sInt(STR_DEFAULT_VALUE), _sFloat(STR_DEFAULT_VALUE), _sDouble(STR_DEFAULT_VALUE)
@@ -96,9 +97,8 @@ bool		Conversion::checkNan(std::string argv)
 {
 	if (argv.compare("nan") == 0)
 	{
-		std::cout << "exec Nan" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: nan" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: nanf" << std::endl;
@@ -112,9 +112,8 @@ bool		Conversion::checkNanf(std::string argv)
 {
 	if (argv.compare("nanf") == 0)
 	{
-		std::cout << "exec Nanf" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: nan" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: nanf" << std::endl;
@@ -128,9 +127,8 @@ bool		Conversion::checkPlusInf(std::string argv)
 {
 	if (argv.compare("+inf") == 0 || argv.compare("inf") == 0)
 	{
-		std::cout << "exec +inf" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: +inf" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: +inff" << std::endl;
@@ -144,9 +142,8 @@ bool		Conversion::checkPlusInff(std::string argv)
 {
 	if (argv.compare("+inff") == 0 || argv.compare("inff") == 0)
 	{
-		std::cout << "exec +inff" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: +inf" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: +inff" << std::endl;
@@ -160,9 +157,8 @@ bool		Conversion::checkMoinsInf(std::string argv)
 {
 	if (argv.compare("-inf") == 0)
 	{
-		std::cout << "exec -inf" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: -inf" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: -inff" << std::endl;
@@ -176,9 +172,8 @@ bool		Conversion::checkMoinsInff(std::string argv)
 {
 	if (argv.compare("-inff") == 0)
 	{
-		std::cout << "exec -inff" << std::endl;
 		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: -inf" << std::endl;
+		std::cout << "int: impossible" << std::endl;
 		std::cout << std::setprecision(1);
 		std::cout << std::fixed;
 		std::cout << "float: -inff" << std::endl;
@@ -190,7 +185,6 @@ bool		Conversion::checkMoinsInff(std::string argv)
 
 void			Conversion::execChar(std::string argv)
 {
-	std::cout << "exec char" << std::endl;
 	if (!isprint(argv[0]))
 		_sChar = "Non displayable";
 	else
@@ -203,7 +197,6 @@ void			Conversion::execChar(std::string argv)
 
 void			Conversion::execInt(std::string argv)
 {
-	std::cout << "exec int" << std::endl;
 	double	tmp;
 
 	std::istringstream is(argv.substr(0, argv.length()));
@@ -214,6 +207,8 @@ void			Conversion::execInt(std::string argv)
 		_vInt = tmp;
 	if (!isprint(static_cast<int>(tmp)))
 		_sChar = "Non displayable";
+	if ((static_cast<int>(tmp)) < 0 || 127 < (static_cast<int>(tmp)))
+		_sChar = "impossible";
 	else
 		_vChar = static_cast<char>(tmp);
 	_vFloat = static_cast<float>(tmp);
@@ -224,11 +219,11 @@ void			Conversion::execInt(std::string argv)
 void			Conversion::execFloat(std::string argv)
 {
 	std::istringstream is(argv.substr(0, argv.length() - 1));
-	std::cout << "exec float" << std::endl;
-
 	is >> _vFloat;
 	if (!isprint(static_cast<int>(_vFloat)))
 		_sChar = "Non displayable";
+	if ((static_cast<int>(_vFloat)) < 0 || 127 < static_cast<int>(_vFloat))
+		_sChar = "impossible";
 	else
 		_vChar = static_cast<char>(_vFloat);
 	if (INT_MIN > static_cast<double>(_vFloat) || static_cast<double>(_vFloat) > INT_MAX)
@@ -241,11 +236,12 @@ void			Conversion::execFloat(std::string argv)
 
 void			Conversion::execDouble(std::string argv)
 {
-	std::cout << "exec double" << std::endl;
 	std::istringstream is(argv.substr(0, argv.length()));
 	is >> _vDouble;
 	if (!isprint(static_cast<int>(_vDouble)))
 		_sChar = "Non displayable";
+	if ((static_cast<int>(_vDouble)) < 0 || 127 < static_cast<int>(_vDouble))
+		_sChar = "impossible";
 	else
 		_vChar = static_cast<char>(_vDouble);
 	if (INT_MIN > (_vDouble) || (_vDouble) > INT_MAX)
@@ -264,13 +260,7 @@ bool		Conversion::checkArgv(std::string argv) // add ++ -- condition at the begi
 		checkAlpha += isalpha(argv[i]);
 	if ((checkAlpha != 0 && argv.size() > 1) || (isalpha(argv.size()) && argv[argv.size()] != 'f'))
 	{
-		std::cout << "exec impossible checkArgv" << std::endl;
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		std::cout << std::setprecision(1);
-		std::cout << std::fixed;
-		std::cout << "float: impossible" << std::endl;
-		std::cout << "double: impossible"<< std::endl;
+		printImposible();
 		return true;
 	}
 	else
@@ -279,11 +269,8 @@ bool		Conversion::checkArgv(std::string argv) // add ++ -- condition at the begi
 
 void		Conversion::printImposible(void) const
 {
-	std::cout << "exec impossible" << std::endl;
 	std::cout << "char: impossible" << std::endl;
 	std::cout << "int: impossible" << std::endl;
-	std::cout << std::setprecision(1);
-	std::cout << std::fixed;
 	std::cout << "float: impossible" << std::endl;
 	std::cout << "double: impossible"<< std::endl;
 }
@@ -308,6 +295,8 @@ void		Conversion::startConversion(char* argv)
 
 void		Conversion::printResult( void ) const
 {
+	if (ceil(_vFloat) == _vFloat)
+		std::cout << std::fixed << std::setprecision(1);
 	if (_sChar == STR_DEFAULT_VALUE)
 		std::cout << "char: '" << _vChar << "'" << std::endl;
 	else
@@ -316,8 +305,6 @@ void		Conversion::printResult( void ) const
 		std::cout << "int: " << _vInt << std::endl;
 	else
 		std::cout << "int: " << _sInt << std::endl;
-	std::cout << std::setprecision(1);
-	std::cout << std::fixed;
 	if (_sFloat == STR_DEFAULT_VALUE)
 		std::cout << "float: " << _vFloat << "f" << std::endl;
 	else

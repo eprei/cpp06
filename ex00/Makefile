@@ -5,7 +5,7 @@ NAME = Conversion
 
 SRCS = main.cpp Conversion.cpp
 
-CFLAGS = -Werror -Wextra -Wall -std=c++98  -g #-pedantic
+CFLAGS = -Werror -Wextra -Wall -std=c++98  #-g #-pedantic
 
 OBJ = $(SRCS:.cpp=.o)
 
