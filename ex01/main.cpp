@@ -14,11 +14,11 @@ int main ( void )
 	std::cout << "address stored in data_ptr1: " << data_ptr1 << std::endl;
 	std::cout << "value stored in data_ptr->info: " << data_ptr1->info << std::endl << std::endl;
 
-	std::cout << "**** serialiting data_ptr1 to uintptr ****" << std::endl;
+	std::cout << "**** serializing data_ptr1 to uintptr ****" << std::endl;
 	uintptr = serialize(data_ptr1);
 	std::cout << "address stored in uintptr: " << uintptr << std::endl << std::endl;
 
-	std::cout << "**** deserialiting uintptr to data_ptr2 ****" << std::endl;
+	std::cout << "**** deserializing uintptr to data_ptr2 ****" << std::endl;
 	data_ptr2 = deserialize(uintptr);
 	std::cout << "address stored in data_ptr2: " << data_ptr2 << std::endl;
 	std::cout << "value stored in data_ptr2->info: " << data_ptr2->info << std::endl << std::endl;
